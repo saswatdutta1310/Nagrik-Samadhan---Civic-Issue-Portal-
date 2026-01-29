@@ -87,7 +87,7 @@ sequenceDiagram
     participant App
     participant System
     
-    User->>App: Log in (OTP/Google)
+    User->>App: Log in (OTP/Google/Email ID)
     App->>System: Authenticate
     System-->>App: Session Token
     
