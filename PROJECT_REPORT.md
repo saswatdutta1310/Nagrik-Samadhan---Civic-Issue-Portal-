@@ -16,7 +16,7 @@
 3.  **Aditya Kumar** - [AP25110071284]
 4.  **Dharitri Padhi** - [AP25110070073]
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -26,7 +26,7 @@
 
 Our solution leverages real-time geolocation (Google Maps API) and gamification to turn civic reporting into an engaging, accountable process. Users can simply point, shoot, and report issues, which are then tracked in real-time. We incentivize participation through "Karma Points" and a leaderboard system. Within the hackathon duration, we successfully implemented the core reporting workflow, authentication system, and an interactive map interface, demonstrating a functional MVP that empowers citizens to be active participants in governance.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -40,7 +40,7 @@ The rapid urbanization of Indian cities has led to increasing civic issues such 
 
 This gap results in deteriorating urban infrastructure and a loss of trust between the public and administration. Our project addresses this relevant real-world problem by creating a unified, transparent, and rewarding channel for civic feedback.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -62,7 +62,7 @@ This gap results in deteriorating urban infrastructure and a loss of trust betwe
 
 The solution is unique because it combines utility (reporting) with engagement (gamification), ensuring sustained user interest unlike traditional grievance portals.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -81,7 +81,7 @@ We selected a modern, serverless technology stack to ensure performance, scalabi
 *   **Deployment: Vercel**
     *   *Selection:* Optimized for frontend frameworks, ensuring high availability and fast content delivery.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -100,7 +100,7 @@ The system follows a **Serverless Architecture**, minimizing infrastructure mana
 User -> Front-end (React) -> Supabase Client -> PostgreSQL DB / Storage Bucket
 User -> Front-end (React) -> Google Maps API -> Map Interface
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -123,7 +123,7 @@ The project is structured as a modern single-page application (SPA).
     *   The frontend communicates with Supabase via the `@supabase/supabase-js` client.
     *   Map markers are dynamically rendered based on the array of issues fetched from the database.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -142,7 +142,7 @@ We have successfully achieved a functional MVP of Nagrik Samadhan.
 
 *(Note: Please insert screenshots below of: 1. The Login Screen, 2. The Dashboard with the Map, 3. The Report Issue Form)*
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -155,7 +155,7 @@ During the hackathon, we encountered several technical and logistical challenges
 3.  **Styling Consistency:** ensuring a uniform "premium" look across all pages took significant time. We overcame this by adopting Shadcn UI components which provided a solid baseline.
 4.  **Geolocation Permissions:** Handling browser permission errors for location access required implementing robust error handling and fallback UI.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -168,7 +168,7 @@ Nagrik Samadhan has immense potential for growth beyond the hackathon:
 3.  **Offline Support:** Implement PWA (Progressive Web App) capabilities so users can save reports offline and sync when they regain connectivity.
 4.  **Citizen Wallet:** Fully implement the reward redemption system where Karma Points can be exchanged for coupons or tax credits.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -176,7 +176,7 @@ Nagrik Samadhan has immense potential for growth beyond the hackathon:
 
 **Nagrik Samadhan** successfully demonstrates how technology can empower citizens and modernize civic governance. By providing a user-friendly, transparent, and gamified platform, we have reimagined the grievance redressal process. During this hackathon, we moved from a concept to a working prototype that addresses a critical need for Indian cities. We are confident that this solution can significantly improve the quality of life and trust in public administration.
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 
 ---
 
@@ -188,4 +188,4 @@ Nagrik Samadhan has immense potential for growth beyond the hackathon:
 4.  **Tailwind CSS Documentation:** [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
 5.  **Lucide Icons:** [https://lucide.dev/](https://lucide.dev/)
 
-**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git](https://github.com/saswatdutta1310/Nagrik_Samadhan-_Final.git)
+**GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
