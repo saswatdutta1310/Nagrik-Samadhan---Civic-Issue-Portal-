@@ -12,6 +12,8 @@ import Leaderboard from "./pages/Leaderboard";
 import Auth from "./pages/Auth";
 import Wallet from "./pages/Wallet";
 import About from "./pages/About";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Notifications from "./pages/Notifications";
 import MyIssues from "./pages/MyIssues";
@@ -63,6 +65,10 @@ export default function App() {
 
                   {/* About */}
                   <Route path="/about" element={<About />} />
+
+                  {/* Profile & Settings */}
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/settings" element={<Settings />} />
 
                   {/* 404 */}
                   <Route path="*" element={<NotFound />} />

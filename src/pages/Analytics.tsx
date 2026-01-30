@@ -6,6 +6,7 @@ import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianG
 import { TrendingUp, CheckCircle2, Clock, XCircle, BarChart3, PieChart as PieChartIcon, Activity } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
+import { MOCK_ISSUES, ACCOUNT_HOLDER_ISSUES } from "@/lib/mockData";
 
 interface AnalyticsData {
     totalIssues: number;
@@ -45,17 +46,25 @@ export default function Analytics() {
             if (!user) return;
 
             // Fetch user's issues
-            const { data: issues, error } = await supabase
+            const { data: dbIssues, error } = await supabase
                 .from("issues")
                 .select("*")
                 .eq("user_id", user.id);
 
             if (error) throw error;
 
-            if (!issues) {
-                setLoading(false);
-                return;
-            }
+            // Combine DB issues with Mock issues for demo
+            const allIssues = [
+                ...(dbIssues || []),
+                ...MOCK_ISSUES,
+                ...ACCOUNT_HOLDER_ISSUES
+            ];
+
+            // Normalize statuses for statistics
+            const issues = allIssues.map(i => ({
+                ...i,
+                status: i.status === "open" ? "reported" : (i.status === "pending" ? "reported" : i.status)
+            }));
 
             // Calculate statistics
             const totalIssues = issues.length;
@@ -91,7 +100,7 @@ export default function Analytics() {
                 date.setDate(date.getDate() - i);
                 const dateStr = date.toISOString().split("T")[0];
                 const count = issues.filter((issue) => {
-                    const issueDate = new Date(issue.created_at).toISOString().split("T")[0];
+                    const issueDate = new Date(issue.reported_at || issue.created_at).toISOString().split("T")[0];
                     return issueDate === dateStr;
                 }).length;
                 timeline.push({

@@ -10,7 +10,8 @@ import {
   LogOut,
   ChevronDown,
   Trophy,
-  BarChart3
+  BarChart3,
+  User
 } from "lucide-react";
 
 import { useWallet } from "@/contexts/WalletContext";
@@ -95,7 +96,7 @@ export default function UserMenu() {
         {open && (
           <div className="absolute right-0 mt-2 w-72 rounded-2xl border bg-card shadow-xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200 z-50 overflow-hidden">
             {/* User Header */}
-            <div className="bg-muted/30 p-5 border-b">
+            <Link to="/profile" onClick={() => setOpen(false)} className="block bg-muted/30 p-5 border-b hover:bg-muted/50 transition-colors">
               <h4 className="font-semibold text-base">{name}</h4>
               <p className="text-sm text-muted-foreground truncate">{email}</p>
 
@@ -105,10 +106,16 @@ export default function UserMenu() {
                   <span>{points} {t("common.points")}</span>
                 </div>
               </div>
-            </div>
+            </Link>
 
             {/* Menu Items */}
             <div className="p-2">
+              <MenuItem
+                to="/profile"
+                icon={<User className="w-4 h-4" />}
+                label="Profile"
+                onClick={() => setOpen(false)}
+              />
               <MenuItem
                 to="/my-issues"
                 icon={<FileText className="w-4 h-4" />}

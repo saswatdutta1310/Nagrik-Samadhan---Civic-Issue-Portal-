@@ -10,6 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ACCOUNT_HOLDER_ISSUES } from "@/lib/mockData";
 
 type Issue = {
     id: string;
@@ -46,7 +47,24 @@ export default function MyIssues() {
             console.error("Error fetching my issues:", error);
         }
 
-        setIssues((data as Issue[]) ?? []);
+        const dbIssues = (data as Issue[]) ?? [];
+        const combinedIssues = [
+            ...dbIssues,
+            ...ACCOUNT_HOLDER_ISSUES.map(i => ({
+                ...i,
+                user_id: user.id, // Associate mock issues with current user for demo
+                status: i.status === "open" ? "reported" : i.status
+            }))
+        ];
+
+        // Sort by date
+        combinedIssues.sort((a, b) => {
+            const dateA = new Date(a.reported_at || 0).getTime();
+            const dateB = new Date(b.reported_at || 0).getTime();
+            return dateB - dateA;
+        });
+
+        setIssues(combinedIssues as Issue[]);
         setLoading(false);
     };
 

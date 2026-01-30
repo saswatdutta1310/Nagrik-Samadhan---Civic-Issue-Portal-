@@ -109,15 +109,24 @@ const IssueDetail = () => {
     ]
   };
 
+  const NEW_ISSUE_FUNDING_DATA = {
+    approvedCost: 0,
+    funded: 0,
+    government: 0,
+    community: 0,
+    progress: 0,
+    contributors: []
+  };
+
   // Determine valid data source
   const fundingInfo = issue?.funding ? {
     approvedCost: issue.funding.total,
     funded: issue.funding.raised,
     government: issue.funding.government,
     community: issue.funding.community,
-    progress: (issue.funding.raised / issue.funding.total) * 100,
-    contributors: issue.funding.contributors
-  } : STATIC_FUNDING_DATA;
+    progress: issue.funding.total > 0 ? (issue.funding.raised / issue.funding.total) * 100 : 0,
+    contributors: issue.funding.contributors || []
+  } : (issue?.status === 'reported' ? NEW_ISSUE_FUNDING_DATA : STATIC_FUNDING_DATA);
 
   const TIMELINE_STEPS = [
     {

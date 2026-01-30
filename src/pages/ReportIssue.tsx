@@ -60,6 +60,13 @@ export default function ReportIssue() {
 
     setLoading(true);
 
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Please log in to report an issue");
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from("issues").insert([
       {
         title,
@@ -70,6 +77,7 @@ export default function ReportIssue() {
         location_address: address || null,
         latitude: lat,
         longitude: lng,
+        user_id: user.id
       },
     ]);
 

@@ -15,6 +15,7 @@ import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { AadhaarVerification } from "../components/AadhaarVerification";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -58,9 +59,11 @@ export default function Auth() {
     }
   };
 
+  const [isAadhaarVerified, setIsAadhaarVerified] = useState(false);
+  const [showAadhaarDialog, setShowAadhaarDialog] = useState(false);
+
   // Email sign up
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleActualSignup = async () => {
     setLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -79,6 +82,21 @@ export default function Auth() {
       toast.error(t("auth.error") || "Signup error", { description: err.message });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    // Check if Aadhaar is already verified
+    if (localStorage.getItem("aadhaar_verified") === "true" || isAadhaarVerified) {
+      handleActualSignup();
+    } else {
+      setShowAadhaarDialog(true);
     }
   };
 
@@ -161,10 +179,27 @@ export default function Auth() {
       }
       toast.success(t("auth.success") || "Logged in!", { description: t("auth.welcome") || "Welcome to Nagrik Samadhan" });
       navigate("/");
-    } catch (err: any) {
-      toast.error(t("auth.error") || "OTP verify error", { description: err.message });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePhoneSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const digits = phoneNumber.replace(/\D/g, "");
+    if (digits.length !== 10) {
+      toast.error(t("auth.invalidPhone") || "Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    if (localStorage.getItem("aadhaar_verified") === "true" || isAadhaarVerified) {
+      if (showOtpInput) {
+        handleVerifyOtp(e);
+      } else {
+        handleSendOtp(e);
+      }
+    } else {
+      setShowAadhaarDialog(true);
     }
   };
 
@@ -381,7 +416,7 @@ export default function Auth() {
                       </div>
                     ) : null}
 
-                    <Button type="submit" disabled={loading} variant="outline" className="w-full">
+                    <Button type="button" onClick={handlePhoneSignup} disabled={loading} variant="outline" className="w-full">
                       {showOtpInput ? t("auth.verifyOtpSignup") : t("auth.signupPhone")}
                     </Button>
                   </form>
