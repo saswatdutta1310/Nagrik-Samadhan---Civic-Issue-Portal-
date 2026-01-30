@@ -51,6 +51,7 @@ const translations: Record<Language, Record<string, string>> = {
         "common.online": "Online",
         "common.points": "Points",
         "common.viewAll": "View All",
+        "common.recently": "Recently",
 
         // Hero
         "hero.verified": "Government Verified Platform",
@@ -266,7 +267,6 @@ const translations: Record<Language, Record<string, string>> = {
         "myIssues.loading": "Loading your history...",
         "myIssues.noIssuesTitle": "No issues reported yet",
         "myIssues.noIssuesDesc": "You haven't reported any civic issues yet.",
-        "common.recently": "Recently",
 
         // Wallet
         "wallet.currentBalance": "Current Balance",
@@ -392,6 +392,20 @@ const translations: Record<Language, Record<string, string>> = {
         "issues.viewAll": "View All Issues",
         "issues.noReports": "No issues reported yet.",
         "common.loadingRecent": "Loading recent issues...",
+
+        // Browse
+        "browse.title": "Browse Issues",
+        "browse.subtitle": "Explore and track civic issues reported by citizens in your community.",
+        "browse.searchPlaceholder": "Search by issue title or description...",
+        "browse.urgency": "Urgency",
+        "browse.all": "All",
+        "browse.low": "Low",
+        "browse.medium": "Medium",
+        "browse.high": "High",
+        "browse.loading": "Loading issues...",
+        "browse.noIssues": "No issues found matching your criteria.",
+        "browse.urgentBadge": "Urgent",
+        "issues.inprogress": "In Progress",
     },
     hi: {
         // Navigation
@@ -432,6 +446,7 @@ const translations: Record<Language, Record<string, string>> = {
         "common.online": "ऑनलाइन",
         "common.points": "अंक",
         "common.viewAll": "सभी देखें",
+        "common.recently": "हाल ही में",
 
         // Hero
         "hero.verified": "सरकारी सत्यापित मंच",
@@ -647,7 +662,6 @@ const translations: Record<Language, Record<string, string>> = {
         "myIssues.loading": "आपका इतिहास लोड हो रहा है...",
         "myIssues.noIssuesTitle": "अभी तक कोई समस्या रिपोर्ट नहीं की गई",
         "myIssues.noIssuesDesc": "आपने अभी तक कोई नागरिक समस्या रिपोर्ट नहीं की है।",
-        "common.recently": "हाल ही में",
 
         // Wallet
         "wallet.currentBalance": "वर्तमान शेष राशि",
@@ -773,6 +787,20 @@ const translations: Record<Language, Record<string, string>> = {
         "issues.viewAll": "सभी समस्याएं देखें",
         "issues.noReports": "अभी तक कोई समस्या रिपोर्ट नहीं की गई है।",
         "common.loadingRecent": "हाल की समस्याएं लोड हो रही हैं...",
+
+        // Browse
+        "browse.title": "समस्याएं ब्राउज़ करें",
+        "browse.subtitle": "अपने समुदाय में नागरिकों द्वारा रिपोर्ट की गई नागरिक समस्याओं का अन्वेषण और ट्रैक करें।",
+        "browse.searchPlaceholder": "समस्या के शीर्षक या विवरण से खोजें...",
+        "browse.urgency": "अति-आवश्यकता",
+        "browse.all": "सभी",
+        "browse.low": "कम",
+        "browse.medium": "मध्यम",
+        "browse.high": "उच्च",
+        "browse.loading": "समस्याएं लोड हो रही हैं...",
+        "browse.noIssues": "आपके मानदंडों से मेल खाने वाली कोई समस्या नहीं मिली।",
+        "browse.urgentBadge": "अति-आवश्यक",
+        "issues.inprogress": "प्रगति में",
     },
 };
 
