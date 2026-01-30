@@ -4,6 +4,8 @@ import { Bell, CheckCircle2, Info, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { hi, enIN } from "date-fns/locale";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Mock notifications (since no backend table was specified for this)
 const MOCK_NOTIFICATIONS = [
@@ -37,6 +39,7 @@ const MOCK_NOTIFICATIONS = [
 ];
 
 export default function Notifications() {
+    const { t, language } = useLanguage();
     const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
 
     const markAllRead = () => {
@@ -49,10 +52,10 @@ export default function Notifications() {
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-3xl font-bold flex items-center gap-3">
                         <Bell className="h-8 w-8 text-primary" />
-                        Notifications
+                        {t("nav.notifications")}
                     </h1>
                     <Button variant="outline" size="sm" onClick={markAllRead}>
-                        Mark all as read
+                        {t("notifications.markAllRead")}
                     </Button>
                 </div>
 
@@ -60,7 +63,7 @@ export default function Notifications() {
                     {notifications.length === 0 ? (
                         <div className="text-center py-12 text-muted-foreground">
                             <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                            <p>No notifications yet</p>
+                            <p>{t("notifications.noNotifications")}</p>
                         </div>
                     ) : (
                         notifications.map((n) => (
@@ -80,7 +83,10 @@ export default function Notifications() {
                                                 {n.title}
                                             </h4>
                                             <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
-                                                {formatDistanceToNow(n.date, { addSuffix: true })}
+                                                {formatDistanceToNow(n.date, {
+                                                    addSuffix: true,
+                                                    locale: language === 'hi' ? hi : enIN
+                                                })}
                                             </span>
                                         </div>
                                         <p className="text-sm text-muted-foreground mt-1">

@@ -1,49 +1,52 @@
 import { Shield, Eye, Users, IndianRupee, Bell, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const features = [
-  {
-    icon: Shield,
-    title: "Privacy Protected",
-    description: "Automatic face and vehicle plate blurring ensures citizen privacy while maintaining transparency.",
-  },
-  {
-    icon: Eye,
-    title: "Full Transparency",
-    description: "Every action, approval, and expense is publicly visible with immutable audit trails.",
-  },
-  {
-    icon: Users,
-    title: "Community Funding",
-    description: "Support local issues with donations. All funds held in escrow with automatic refunds if unused.",
-  },
-  {
-    icon: IndianRupee,
-    title: "Financial Clarity",
-    description: "All costs in ₹ INR with clear breakdown of government and community contributions.",
-  },
-  {
-    icon: Bell,
-    title: "Real-time Updates",
-    description: "Get instant notifications on issue status, SLA breaches, and resolution updates.",
-  },
-  {
-    icon: Award,
-    title: "Rewards Program",
-    description: "Earn points for verified reports. Monthly leaderboard with cash rewards for top contributors.",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function FeaturesSection() {
+  const { t } = useLanguage();
+
+  const features = [
+    {
+      icon: Shield,
+      title: t("features.f1.title"),
+      description: t("features.f1.desc"),
+    },
+    {
+      icon: Eye,
+      title: t("features.f2.title"),
+      description: t("features.f2.desc"),
+    },
+    {
+      icon: Users,
+      title: t("features.f3.title"),
+      description: t("features.f3.desc"),
+    },
+    {
+      icon: IndianRupee,
+      title: t("features.f4.title"),
+      description: t("features.f4.desc"),
+    },
+    {
+      icon: Bell,
+      title: t("features.f5.title"),
+      description: t("features.f5.desc"),
+    },
+    {
+      icon: Award,
+      title: t("features.f6.title"),
+      description: t("features.f6.desc"),
+    },
+  ];
+
   return (
     <section className="py-16 md:py-24 bg-card">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Built for Accountability
+            {t("features.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Every feature designed to ensure transparency, prevent corruption, and empower citizens
+            {t("features.subtitle")}
           </p>
         </div>
 

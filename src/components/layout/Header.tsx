@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Bell } from "lucide-react";
 import { useState } from "react";
 import UserMenu from "@/components/layout/UserMenu";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
@@ -31,25 +34,27 @@ export function Header() {
         {/* ✅ DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-6">
           <NavLink to="/issues" active={location.pathname === "/issues"}>
-            Browse Issues
+            {t("nav.browseIssues")}
           </NavLink>
           <NavLink to="/report" active={location.pathname === "/report"}>
-            Report Issue
+            {t("nav.report")}
           </NavLink>
           <NavLink to="/leaderboard" active={location.pathname === "/leaderboard"}>
-            Leaderboard
+            {t("nav.leaderboard")}
           </NavLink>
           <NavLink to="/about" active={location.pathname === "/about"}>
-            About
+            {t("nav.about")}
           </NavLink>
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
+          <LanguageToggle />
+
           <Link to="/notifications">
             <Button
               variant="ghost"
               size="icon"
-              aria-label="Notifications"
+              aria-label={t("nav.notifications")}
             >
               <Bell className="h-5 w-5" />
             </Button>
@@ -83,7 +88,7 @@ export function Header() {
               active={location.pathname === "/issues"}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Browse Issues
+              {t("nav.browseIssues")}
             </MobileNavLink>
 
             <MobileNavLink
@@ -91,7 +96,7 @@ export function Header() {
               active={location.pathname === "/report"}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Report Issue
+              {t("nav.report")}
             </MobileNavLink>
 
             <MobileNavLink
@@ -99,7 +104,7 @@ export function Header() {
               active={location.pathname === "/leaderboard"}
               onClick={() => setMobileMenuOpen(false)}
             >
-              Leaderboard
+              {t("nav.leaderboard")}
             </MobileNavLink>
 
             <MobileNavLink
@@ -107,7 +112,7 @@ export function Header() {
               active={location.pathname === "/about"}
               onClick={() => setMobileMenuOpen(false)}
             >
-              About
+              {t("nav.about")}
             </MobileNavLink>
 
             {/* ✅ MOBILE USER MENU */}
@@ -136,8 +141,8 @@ function NavLink({
     <Link
       to={to}
       className={`text-sm font-medium transition-colors ${active
-          ? "text-foreground"
-          : "text-muted-foreground hover:text-foreground"
+        ? "text-foreground"
+        : "text-muted-foreground hover:text-foreground"
         }`}
     >
       {children}
@@ -161,8 +166,8 @@ function MobileNavLink({
       to={to}
       onClick={onClick}
       className={`py-2 text-sm font-medium ${active
-          ? "text-foreground"
-          : "text-muted-foreground hover:text-foreground"
+        ? "text-foreground"
+        : "text-muted-foreground hover:text-foreground"
         }`}
     >
       {children}

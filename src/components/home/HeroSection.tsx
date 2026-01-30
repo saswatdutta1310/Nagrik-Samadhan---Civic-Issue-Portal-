@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Eye, Users } from "lucide-react";
 import heroImage from "@/assets/hero-city.jpg";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function HeroSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative overflow-hidden">
       {/* Background Image */}
@@ -21,30 +24,29 @@ export function HeroSection() {
           <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 mb-6">
             <Shield className="h-4 w-4 text-accent-foreground" />
             <span className="text-sm font-medium text-accent-foreground">
-              Government Verified Platform
+              {t("hero.verified")}
             </span>
           </div>
-          
+
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-            Your Voice, <br />
-            <span className="text-primary">Your City's Future</span>
+            {t("hero.title1")} <br />
+            <span className="text-primary">{t("hero.title2")}</span>
           </h1>
-          
+
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl">
-            Report civic issues, track resolutions, and hold authorities accountable. 
-            Together, we build transparent and responsive governance.
+            {t("hero.subtitle")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <Link to="/report">
               <Button size="lg" className="w-full sm:w-auto">
-                Report an Issue
+                {t("hero.reportBtn")}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link to="/issues">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                Browse Issues
+                {t("hero.browseBtn")}
               </Button>
             </Link>
           </div>
@@ -57,7 +59,7 @@ export function HeroSection() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">15K+</p>
-                <p className="text-xs text-muted-foreground">Issues Resolved</p>
+                <p className="text-xs text-muted-foreground">{t("hero.stats.resolved")}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -66,7 +68,7 @@ export function HeroSection() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">50K+</p>
-                <p className="text-xs text-muted-foreground">Active Citizens</p>
+                <p className="text-xs text-muted-foreground">{t("hero.stats.citizens")}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -75,7 +77,7 @@ export function HeroSection() {
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">₹2Cr+</p>
-                <p className="text-xs text-muted-foreground">Funds Utilized</p>
+                <p className="text-xs text-muted-foreground">{t("hero.stats.funds")}</p>
               </div>
             </div>
           </div>

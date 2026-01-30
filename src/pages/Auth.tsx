@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, ArrowLeft, Chrome } from "lucide-react";
+import { MapPin, ArrowLeft } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -14,9 +14,11 @@ import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Common
   const [loading, setLoading] = useState(false);
@@ -47,10 +49,10 @@ export default function Auth() {
         },
       });
       if (error) {
-        toast.error("Google login failed", { description: error.message });
+        toast.error(t("auth.error") || "Google login failed", { description: error.message });
       }
     } catch (err: any) {
-      toast.error("Google login error", { description: err.message });
+      toast.error(t("auth.error") || "Google login error", { description: err.message });
     } finally {
       setLoading(false);
     }
@@ -66,15 +68,15 @@ export default function Auth() {
         password,
       });
       if (error) {
-        toast.error("Signup failed", { description: error.message });
+        toast.error(t("auth.error") || "Signup failed", { description: error.message });
       } else {
-        toast.success("Account created", {
+        toast.success(t("auth.createAccount") || "Account created", {
           description:
-            "Check your email for confirmation (if enabled) and then sign in.",
+            t("auth.checkEmail") || "Check your email for confirmation (if enabled) and then sign in.",
         });
       }
     } catch (err: any) {
-      toast.error("Signup error", { description: err.message });
+      toast.error(t("auth.error") || "Signup error", { description: err.message });
     } finally {
       setLoading(false);
     }
@@ -90,13 +92,13 @@ export default function Auth() {
         password,
       });
       if (error) {
-        toast.error("Login failed", { description: error.message });
+        toast.error(t("auth.error") || "Login failed", { description: error.message });
         return;
       }
-      toast.success("Login successful!", { description: "Welcome to Nagrik Samadhan" });
+      toast.success(t("auth.success") || "Login successful!", { description: t("auth.welcome") || "Welcome to Nagrik Samadhan" });
       navigate("/");
     } catch (err: any) {
-      toast.error("Login error", { description: err.message });
+      toast.error(t("auth.error") || "Login error", { description: err.message });
     } finally {
       setLoading(false);
     }
@@ -107,7 +109,7 @@ export default function Auth() {
     if (e) e.preventDefault();
     const digits = phoneNumber.replace(/\D/g, "");
     if (digits.length !== 10) {
-      toast.error("Please enter a valid 10-digit phone number");
+      toast.error(t("auth.invalidPhone") || "Please enter a valid 10-digit phone number");
       return;
     }
 
@@ -118,15 +120,15 @@ export default function Auth() {
         phone,
       });
       if (error) {
-        toast.error("Failed to send OTP", { description: error.message });
+        toast.error(t("auth.error") || "Failed to send OTP", { description: error.message });
         return;
       }
       setShowOtpInput(true);
-      toast.success("OTP sent successfully!", {
-        description: `OTP sent to ${phone}`,
+      toast.success(t("auth.otpSent") || "OTP sent successfully!", {
+        description: `${t("auth.otpSentDesc") || "OTP sent to"} ${phone}`,
       });
     } catch (err: any) {
-      toast.error("Error sending OTP", { description: err.message });
+      toast.error(t("auth.error") || "Error sending OTP", { description: err.message });
     } finally {
       setLoading(false);
     }
@@ -137,11 +139,11 @@ export default function Auth() {
     e.preventDefault();
     const digits = phoneNumber.replace(/\D/g, "");
     if (digits.length !== 10) {
-      toast.error("Please enter a valid 10-digit phone number");
+      toast.error(t("auth.invalidPhone") || "Please enter a valid 10-digit phone number");
       return;
     }
     if (!otp) {
-      toast.error("Please enter the OTP you received");
+      toast.error(t("auth.enterOtp") || "Please enter the OTP you received");
       return;
     }
 
@@ -154,13 +156,13 @@ export default function Auth() {
         type: "sms",
       });
       if (error) {
-        toast.error("OTP verification failed", { description: error.message });
+        toast.error(t("auth.error") || "OTP verification failed", { description: error.message });
         return;
       }
-      toast.success("Logged in!", { description: "Welcome to Nagrik Samadhan" });
+      toast.success(t("auth.success") || "Logged in!", { description: t("auth.welcome") || "Welcome to Nagrik Samadhan" });
       navigate("/");
     } catch (err: any) {
-      toast.error("OTP verify error", { description: err.message });
+      toast.error(t("auth.error") || "OTP verify error", { description: err.message });
     } finally {
       setLoading(false);
     }
@@ -213,38 +215,38 @@ export default function Auth() {
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Home
+            {t("common.backToHome")}
           </Link>
 
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login">{t("auth.login")}</TabsTrigger>
+              <TabsTrigger value="signup">{t("auth.signup")}</TabsTrigger>
             </TabsList>
 
             {/* Login Tab */}
             <TabsContent value="login">
               <Card>
                 <CardHeader>
-                  <CardTitle>Welcome Back</CardTitle>
+                  <CardTitle>{t("auth.welcome")}</CardTitle>
                   <CardDescription>
-                    Login to track your reported issues and earn rewards
+                    {t("auth.loginDesc")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Google Login */}
                   <div className="space-y-2">
-                    <GoogleButton text="Continue with Google" />
+                    <GoogleButton text={t("auth.googleLogin")} />
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
-                      <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Or continue with</span></div>
+                      <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t("auth.orContinueWith")}</span></div>
                     </div>
                   </div>
 
                   {/* Phone Login */}
                   <form onSubmit={showOtpInput ? handleVerifyOtp : handleSendOtp} className="space-y-4">
                     <div>
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone">{t("auth.phone")}</Label>
                       <div className="flex gap-2 mt-2">
                         <div className="flex items-center px-3 border border-input rounded-md bg-muted">
                           <span className="text-sm text-muted-foreground">+91</span>
@@ -254,7 +256,7 @@ export default function Auth() {
                           type="tel"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                          placeholder="Enter 10-digit number"
+                          placeholder={t("auth.enterPhone")}
                           className="flex-1"
                         />
                       </div>
@@ -262,24 +264,24 @@ export default function Auth() {
 
                     {showOtpInput ? (
                       <div>
-                        <Label htmlFor="otp">OTP</Label>
+                        <Label htmlFor="otp">{t("auth.otp")}</Label>
                         <Input
                           id="otp"
                           type="text"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                          placeholder="Enter OTP"
+                          placeholder={t("auth.enterOtp")}
                         />
                       </div>
                     ) : null}
 
                     <div className="flex items-center justify-between gap-2">
                       <Button type="submit" disabled={loading} className="w-full">
-                        {showOtpInput ? "Verify OTP & Login" : "Send OTP"}
+                        {showOtpInput ? t("auth.verifyOtp") : t("auth.sendOtp")}
                       </Button>
                       {showOtpInput ? (
                         <Button variant="ghost" onClick={() => { setShowOtpInput(false); setOtp(""); }}>
-                          Edit Number
+                          {t("auth.editNumber")}
                         </Button>
                       ) : null}
                     </div>
@@ -287,13 +289,13 @@ export default function Auth() {
 
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
-                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Or using email</span></div>
+                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t("auth.orUsingEmail")}</span></div>
                   </div>
 
                   {/* Email Login */}
                   <form onSubmit={handleEmailLogin} className="space-y-4">
                     <div>
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{t("auth.email")}</Label>
                       <Input
                         id="email"
                         type="email"
@@ -304,24 +306,24 @@ export default function Auth() {
                     </div>
 
                     <div>
-                      <Label htmlFor="password">Password</Label>
+                      <Label htmlFor="password">{t("auth.password")}</Label>
                       <Input
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Your password"
+                        placeholder={t("auth.password") || "Your password"}
                       />
                     </div>
 
                     <div className="flex items-center justify-between gap-2">
                       <Button type="submit" disabled={loading} className="w-full">
-                        Login with Email
+                        {t("auth.loginEmail")}
                       </Button>
                     </div>
                     <div className="text-center">
                       <Link to="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground">
-                        Forgot password?
+                        {t("auth.forgotPassword")}
                       </Link>
                     </div>
                   </form>
@@ -333,24 +335,24 @@ export default function Auth() {
             <TabsContent value="signup">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create an account</CardTitle>
-                  <CardDescription>Sign up to report issues and participate</CardDescription>
+                  <CardTitle>{t("auth.createAccount")}</CardTitle>
+                  <CardDescription>{t("auth.createAccountDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
 
                   {/* Google Signup */}
                   <div className="space-y-2">
-                    <GoogleButton text="Sign up with Google" />
+                    <GoogleButton text={t("auth.googleSignup")} />
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
-                      <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Or sign up with</span></div>
+                      <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t("auth.orSignupWith")}</span></div>
                     </div>
                   </div>
 
                   {/* Phone Signup (Same as login basically) */}
                   <form onSubmit={showOtpInput ? handleVerifyOtp : handleSendOtp} className="space-y-4">
                     <div>
-                      <Label htmlFor="signup-phone">Phone Number</Label>
+                      <Label htmlFor="signup-phone">{t("auth.phone")}</Label>
                       <div className="flex gap-2 mt-2">
                         <div className="flex items-center px-3 border border-input rounded-md bg-muted">
                           <span className="text-sm text-muted-foreground">+91</span>
@@ -360,7 +362,7 @@ export default function Auth() {
                           type="tel"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                          placeholder="Enter 10-digit number"
+                          placeholder={t("auth.enterPhone")}
                           className="flex-1"
                         />
                       </div>
@@ -368,30 +370,30 @@ export default function Auth() {
 
                     {showOtpInput ? (
                       <div>
-                        <Label htmlFor="signup-otp">OTP</Label>
+                        <Label htmlFor="signup-otp">{t("auth.otp")}</Label>
                         <Input
                           id="signup-otp"
                           type="text"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                          placeholder="Enter OTP"
+                          placeholder={t("auth.enterOtp")}
                         />
                       </div>
                     ) : null}
 
                     <Button type="submit" disabled={loading} variant="outline" className="w-full">
-                      {showOtpInput ? "Verify & Create Account" : "Sign up with Phone"}
+                      {showOtpInput ? t("auth.verifyOtpSignup") : t("auth.signupPhone")}
                     </Button>
                   </form>
 
                   <div className="relative">
                     <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
-                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">Or using email</span></div>
+                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-background px-2 text-muted-foreground">{t("auth.orUsingEmail")}</span></div>
                   </div>
 
                   <form onSubmit={handleSignup} className="space-y-4">
                     <div>
-                      <Label htmlFor="signup-email">Email</Label>
+                      <Label htmlFor="signup-email">{t("auth.email")}</Label>
                       <Input
                         id="signup-email"
                         type="email"
@@ -402,19 +404,19 @@ export default function Auth() {
                     </div>
 
                     <div>
-                      <Label htmlFor="signup-password">Password</Label>
+                      <Label htmlFor="signup-password">{t("auth.password")}</Label>
                       <Input
                         id="signup-password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Create a password"
+                        placeholder={t("auth.password") || "Create a password"}
                       />
                     </div>
 
                     <div>
                       <Button type="submit" disabled={loading} className="w-full">
-                        Create Account
+                        {t("auth.createAccount")}
                       </Button>
                     </div>
                   </form>

@@ -24,8 +24,12 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import MapPicker from "@/components/MapPicker";
+import { generateImageHash, findDuplicateHash } from "@/lib/imageHash";
+import { FraudAlertDialog } from "@/components/FraudAlertDialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ReportIssue() {
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get("category") ?? ""
@@ -42,6 +46,8 @@ export default function ReportIssue() {
 
   const [loading, setLoading] = useState(false);
   const [evidenceFiles, setEvidenceFiles] = useState<File[]>([]);
+  const [imageHashes, setImageHashes] = useState<string[]>([]);
+  const [showFraudAlert, setShowFraudAlert] = useState(false);
 
   // ✅ SUBMIT
   const handleSubmit = async (e: React.FormEvent) => {
@@ -93,17 +99,17 @@ export default function ReportIssue() {
           className="flex items-center gap-2 mb-6 text-muted-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          {t("common.backToHome")}
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6">Report a Civic Issue</h1>
+        <h1 className="text-3xl font-bold mb-6">{t("report.title")}</h1>
 
         {/* Privacy */}
         <Card className="mb-6">
           <CardContent className="flex gap-3 p-4">
             <Shield className="h-5 w-5 text-primary" />
             <p className="text-sm text-muted-foreground">
-              Uploaded media is processed to protect identities
+              {t("report.privacy")}
             </p>
           </CardContent>
         </Card>
@@ -112,8 +118,8 @@ export default function ReportIssue() {
           {/* CATEGORY */}
           <Card>
             <CardHeader>
-              <CardTitle>Category</CardTitle>
-              <CardDescription>Select issue category</CardDescription>
+              <CardTitle>{t("report.category")}</CardTitle>
+              <CardDescription>{t("report.selectCategory")}</CardDescription>
             </CardHeader>
 
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -137,9 +143,9 @@ export default function ReportIssue() {
                       <Icon className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <p className="font-medium">{cat.name}</p>
+                      <p className="font-medium">{t(`categories.${cat.id}.name`)}</p>
                       <p className="text-xs text-muted-foreground line-clamp-2">
-                        {cat.description}
+                        {t(`categories.${cat.id}.desc`)}
                       </p>
                     </div>
                   </button>
@@ -151,16 +157,16 @@ export default function ReportIssue() {
           {/* DETAILS */}
           <Card>
             <CardHeader>
-              <CardTitle>Issue Details</CardTitle>
+              <CardTitle>{t("report.issueDetails")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Title *</Label>
+                <Label>{t("report.issueTitle")} *</Label>
                 <Input value={title} onChange={(e) => setTitle(e.target.value)} />
               </div>
 
               <div>
-                <Label>Description *</Label>
+                <Label>{t("report.description")} *</Label>
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -168,7 +174,7 @@ export default function ReportIssue() {
               </div>
 
               <div>
-                <Label>Urgency *</Label>
+                <Label>{t("report.urgency")} *</Label>
                 <RadioGroup
                   value={urgency}
                   onValueChange={(v) =>
@@ -183,7 +189,7 @@ export default function ReportIssue() {
                         htmlFor={u}
                         className={u === "high" ? "text-destructive" : ""}
                       >
-                        {u.toUpperCase()}
+                        {t(`report.urgency${u.charAt(0).toUpperCase() + u.slice(1)}`)}
                       </Label>
                     </div>
                   ))}
@@ -197,7 +203,7 @@ export default function ReportIssue() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5" />
-                Address (auto-filled from map)
+                {t("report.addressAutoFilled")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -208,9 +214,9 @@ export default function ReportIssue() {
           {/* MAP */}
           <Card>
             <CardHeader>
-              <CardTitle>Pin Location on Map</CardTitle>
+              <CardTitle>{t("report.pinLocation")}</CardTitle>
               <CardDescription>
-                Click or drag marker to select exact location
+                {t("report.pinLocationDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -224,7 +230,7 @@ export default function ReportIssue() {
                 }}
               />
               <p className="text-xs text-muted-foreground mt-2">
-                Selected: {lat.toFixed(5)}, {lng.toFixed(5)}
+                {t("report.selected")}: {lat.toFixed(5)}, {lng.toFixed(5)}
               </p>
             </CardContent>
           </Card>
@@ -234,7 +240,7 @@ export default function ReportIssue() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Camera className="h-5 w-5" />
-                Evidence
+                {t("report.evidence")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -244,21 +250,50 @@ export default function ReportIssue() {
                   accept="image/*,video/*"
                   multiple
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const files = e.target.files;
                     if (files && files.length > 0) {
-                      setEvidenceFiles((prev) => [...prev, ...Array.from(files)]);
-                      toast.success(`${files.length} file(s) added`);
+                      const newFiles = Array.from(files);
+                      const newHashes: string[] = [];
+                      let duplicateFound = false;
+
+                      // Check each image for duplicates
+                      for (const file of newFiles) {
+                        if (file.type.startsWith("image/")) {
+                          try {
+                            const hash = await generateImageHash(file);
+
+                            // Check against existing hashes
+                            const duplicateIndex = findDuplicateHash(hash, imageHashes);
+
+                            if (duplicateIndex !== -1) {
+                              duplicateFound = true;
+                              setShowFraudAlert(true);
+                              break;
+                            }
+
+                            newHashes.push(hash);
+                          } catch (error) {
+                            console.error("Error hashing image:", error);
+                          }
+                        }
+                      }
+
+                      if (!duplicateFound) {
+                        setEvidenceFiles((prev) => [...prev, ...newFiles]);
+                        setImageHashes((prev) => [...prev, ...newHashes]);
+                        toast.success(`${files.length} ${t("report.filesAdded")}`);
+                      }
                     }
                   }}
                 />
                 <div className="pointer-events-none">
                   <Camera className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <p className="text-sm font-medium">
-                    Drop photos or videos here, or click to browse
+                    {t("report.dropPhotos")}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Supports JPG, PNG, MP4
+                    {t("report.supportsFormats")}
                   </p>
                 </div>
               </div>
@@ -274,7 +309,7 @@ export default function ReportIssue() {
                       <div key={index} className="relative aspect-square rounded-lg overflow-hidden border">
                         {isVideo ? (
                           <div className="w-full h-full bg-black flex items-center justify-center">
-                            <span className="text-xs text-white">Video</span>
+                            <span className="text-xs text-white">{t("report.video")}</span>
                           </div>
                         ) : (
                           <img src={url} alt="preview" className="w-full h-full object-cover" />
@@ -294,15 +329,21 @@ export default function ReportIssue() {
 
               <div className="flex items-start gap-2 mt-3 text-xs text-muted-foreground">
                 <AlertCircle className="h-4 w-4" />
-                Faces & number plates are auto-blurred
+                {t("report.autoBlur")}
               </div>
             </CardContent>
           </Card>
 
           <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Submitting..." : "Submit Issue"}
+            {loading ? t("report.submitting") : t("report.submit")}
           </Button>
         </form>
+
+        {/* Fraud Alert Dialog */}
+        <FraudAlertDialog
+          open={showFraudAlert}
+          onClose={() => setShowFraudAlert(false)}
+        />
       </div>
     </Layout>
   );

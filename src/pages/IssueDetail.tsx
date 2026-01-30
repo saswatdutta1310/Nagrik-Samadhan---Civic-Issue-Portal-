@@ -38,19 +38,21 @@ import {
   Loader2
 } from "lucide-react";
 import MapPicker from "@/components/MapPicker";
-
-// Helper for dynamic dates
-const getRecentDate = (daysAgo: number) => {
-  const d = new Date();
-  d.setDate(d.getDate() - daysAgo);
-  return d.toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' });
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const IssueDetail = () => {
   const { id } = useParams();
+  const { t, language } = useLanguage();
   const [openPayment, setOpenPayment] = useState(false);
   const [issue, setIssue] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  // Helper for dynamic dates
+  const getRecentDate = (daysAgo: number) => {
+    const d = new Date();
+    d.setDate(d.getDate() - daysAgo);
+    return d.toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
 
   useEffect(() => {
     const fetchIssue = async () => {
@@ -82,7 +84,7 @@ const IssueDetail = () => {
 
       if (error) {
         console.error("Error fetching issue", error);
-        toast.error("Failed to load issue details");
+        toast.error(t("common.loadingError") || "Failed to load issue details");
       } else {
         setIssue(data);
       }
@@ -90,7 +92,7 @@ const IssueDetail = () => {
     };
 
     fetchIssue();
-  }, [id]);
+  }, [id, t, language]);
 
   // Mock Data (Fallback if issue doesn't have funding info)
   const STATIC_FUNDING_DATA = {
@@ -100,10 +102,10 @@ const IssueDetail = () => {
     community: 15000,
     progress: 100,
     contributors: [
-      { name: "Anonymous Citizen", amount: 5000, date: getRecentDate(2) },
+      { name: t("funding.anonymous"), amount: 5000, date: getRecentDate(2) },
       { name: "Priya Gupta", amount: 3000, date: getRecentDate(3) },
       { name: "Amit Kumar", amount: 2000, date: getRecentDate(4) },
-      { name: "Anonymous Citizen", amount: 5000, date: getRecentDate(5) },
+      { name: t("funding.anonymous"), amount: 5000, date: getRecentDate(5) },
     ]
   };
 
@@ -120,46 +122,46 @@ const IssueDetail = () => {
   const TIMELINE_STEPS = [
     {
       id: 1,
-      title: "Reported",
-      description: "Issue has been reported by citizen",
-      date: issue?.reported_at ? new Date(issue.reported_at).toLocaleDateString() : getRecentDate(1),
+      title: t("timeline.reported"),
+      description: t("timeline.reportedDesc"),
+      date: issue?.reported_at ? new Date(issue.reported_at).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN') : getRecentDate(1),
       status: "completed",
       isCurrent: true
     },
     {
       id: 2,
-      title: "State Reviewed",
-      description: "Reviewed by State Government authority",
+      title: t("timeline.stateReviewed"),
+      description: t("timeline.stateReviewedDesc"),
       status: "pending",
     },
     {
       id: 3,
-      title: "Municipal Verified",
-      description: "Verified by Municipal Corporation",
+      title: t("timeline.municipalVerified"),
+      description: t("timeline.municipalVerifiedDesc"),
       status: "pending",
     },
     {
       id: 4,
-      title: "Cost Approved",
-      description: "Resolution cost and timeline approved",
+      title: t("timeline.costApproved"),
+      description: t("timeline.costApprovedDesc"),
       status: "pending",
     },
     {
       id: 5,
-      title: "Funded",
-      description: "Required funding has been secured",
+      title: t("timeline.funded"),
+      description: t("timeline.fundedDesc"),
       status: "pending",
     },
     {
       id: 6,
-      title: "In Progress",
-      description: "Resolution work is underway",
+      title: t("timeline.inProgress"),
+      description: t("timeline.inProgressDesc"),
       status: "pending",
     },
     {
       id: 7,
-      title: "Resolved",
-      description: "Issue has been resolved and verified",
+      title: t("timeline.resolved"),
+      description: t("timeline.resolvedDesc"),
       status: "pending",
     }
   ];
@@ -178,8 +180,8 @@ const IssueDetail = () => {
     return (
       <Layout>
         <div className="container py-8 text-center">
-          <h2 className="text-xl font-bold">Issue Not Found</h2>
-          <Link to="/issues" className="text-primary hover:underline">Browse Issues</Link>
+          <h2 className="text-xl font-bold">{t("issues.notFound")}</h2>
+          <Link to="/issues" className="text-primary hover:underline">{t("issues.backToIssues")}</Link>
         </div>
       </Layout>
     );
@@ -194,7 +196,7 @@ const IssueDetail = () => {
           className="inline-flex items-center gap-2 text-muted-foreground mb-6 hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Issues
+          {t("issues.backToIssues")}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -205,18 +207,18 @@ const IssueDetail = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between mb-4">
                   <div>
-                    <p className="text-sm text-muted-foreground capitalize">{issue.category.replace('_', ' ')} Issue</p>
-                    <Badge variant="secondary" className="mt-1 capitalize">{issue.status}</Badge>
+                    <p className="text-sm text-muted-foreground capitalize">{t(`categories.${issue.category}.name`)} {t("issues.issue")}</p>
+                    <Badge variant="secondary" className="mt-1 capitalize">{t(`issues.${issue.status.toLowerCase().replace(" ", "")}`) || issue.status}</Badge>
                   </div>
 
                   <div className="flex gap-2">
                     <Badge variant={issue.urgency === 'high' ? 'destructive' : 'outline'} className="gap-1 capitalize">
                       <AlertTriangle className="h-3 w-3" />
-                      {issue.urgency} Urgency
+                      {t(`report.urgency${issue.urgency.charAt(0).toUpperCase() + issue.urgency.slice(1)}`)} {t("report.urgency")}
                     </Badge>
                     <Button size="sm" variant="outline">
                       <Share2 className="h-4 w-4 mr-2" />
-                      Share
+                      {t("common.share")}
                     </Button>
                   </div>
                 </div>
@@ -232,14 +234,13 @@ const IssueDetail = () => {
                     <div className="p-1.5 bg-muted rounded-full">
                       <User className="h-3 w-3" />
                     </div>
-                    {/* Mock Reporter Name as DB usually stores UUID */}
-                    Citizen
+                    {t("common.citizen")}
                   </span>
                   <span className="flex items-center gap-2">
                     <div className="p-1.5 bg-muted rounded-full">
                       <Clock className="h-3 w-3" />
                     </div>
-                    {new Date(issue.reported_at).toLocaleDateString()}
+                    {new Date(issue.reported_at).toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN')}
                   </span>
                   {issue.location_address && (
                     <span className="flex items-center gap-2">
@@ -256,7 +257,7 @@ const IssueDetail = () => {
             {/* STATUS TIMELINE */}
             <Card>
               <CardHeader>
-                <CardTitle>Status Timeline</CardTitle>
+                <CardTitle>{t("issues.statusTimeline")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="relative space-y-0 pl-2">
@@ -309,60 +310,60 @@ const IssueDetail = () => {
             {/* ACTION CARD */}
             <Card className="border-primary/20 bg-primary/5 shadow-md">
               <CardContent className="p-6 text-center space-y-4">
-                <h3 className="font-semibold text-lg">Help Solve This Issue</h3>
+                <h3 className="font-semibold text-lg">{t("funding.helpSolve")}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Community contribution accelerates resolution. Funds are held in escrow until completion.
+                  {t("funding.desc")}
                 </p>
 
                 <Dialog open={openPayment} onOpenChange={setOpenPayment}>
                   <DialogTrigger asChild>
                     <Button className="w-full h-12 text-lg shadow-lg hover:shadow-xl transition-all">
                       <IndianRupee className="h-5 w-5 mr-2" />
-                      Fund This Issue
+                      {t("funding.fundBtn")}
                     </Button>
                   </DialogTrigger>
 
                   {/* PAYMENT DIALOG CONTENT (SAME AS BEFORE) */}
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                      <DialogTitle>Contribute to Resolution</DialogTitle>
+                      <DialogTitle>{t("funding.contributeTitle")}</DialogTitle>
                       <DialogDescription>
-                        Secure payment gateway. 100% refundable if issue not resolved.
+                        {t("funding.paymentSecurity")}
                       </DialogDescription>
                     </DialogHeader>
                     <Tabs defaultValue="upi" className="w-full">
                       <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="upi">UPI</TabsTrigger>
-                        <TabsTrigger value="card">Card</TabsTrigger>
-                        <TabsTrigger value="netbanking">Net Banking</TabsTrigger>
+                        <TabsTrigger value="upi">{t("wallet.upi")}</TabsTrigger>
+                        <TabsTrigger value="card">{t("wallet.card")}</TabsTrigger>
+                        <TabsTrigger value="netbanking">{t("wallet.netBanking")}</TabsTrigger>
                       </TabsList>
 
                       {/* AMOUNT INPUT */}
                       <div className="mt-4 mb-2">
-                        <Label>Contribution Amount (₹)</Label>
-                        <Input type="number" placeholder="Enter amount (e.g. 500)" className="mt-1.5" />
+                        <Label>{t("funding.amountLabel")}</Label>
+                        <Input type="number" placeholder={t("funding.amountPlaceholder")} className="mt-1.5" />
                       </div>
 
                       <TabsContent value="upi" className="space-y-4 pt-4">
                         <div className="flex flex-col items-center p-4 border rounded-lg bg-slate-50 dark:bg-slate-900 border-dashed">
                           <QrCode className="h-32 w-32 text-slate-800 dark:text-slate-200 mb-2" />
-                          <p className="text-xs text-muted-foreground">Scan with any UPI App</p>
+                          <p className="text-xs text-muted-foreground">{t("funding.scanUpi")}</p>
                         </div>
                         <div className="space-y-2">
-                          <Label>Or enter UPI ID</Label>
+                          <Label>{t("funding.enterUpi")}</Label>
                           <Input placeholder="username@upi" />
                         </div>
                         <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => {
-                          toast.success("Payment Successful! Thank you for your contribution.");
+                          toast.success(t("common.paySuccess"));
                           setOpenPayment(false);
                         }}>
-                          Pay & Contribute
+                          {t("funding.payContribute")}
                         </Button>
                       </TabsContent>
 
                       <TabsContent value="card" className="space-y-4 pt-4">
                         <div className="space-y-2">
-                          <Label>Card Number</Label>
+                          <Label>{t("funding.cardNumber")}</Label>
                           <div className="relative">
                             <CreditCard className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input className="pl-9" placeholder="0000 0000 0000 0000" />
@@ -370,25 +371,25 @@ const IssueDetail = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label>Expiry</Label>
+                            <Label>{t("funding.expiry")}</Label>
                             <Input placeholder="MM/YY" />
                           </div>
                           <div>
-                            <Label>CVV</Label>
+                            <Label>{t("funding.cvv")}</Label>
                             <Input placeholder="123" />
                           </div>
                         </div>
                         <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={() => {
-                          toast.success("Payment Successful! Thank you for your contribution.");
+                          toast.success(t("common.paySuccess"));
                           setOpenPayment(false);
                         }}>
-                          Pay Securely
+                          {t("funding.paySecurely")}
                         </Button>
                       </TabsContent>
 
                       <TabsContent value="netbanking" className="space-y-4 pt-4">
                         <div className="space-y-2">
-                          <Label>Select Bank</Label>
+                          <Label>{t("funding.selectBank")}</Label>
                           <div className="grid grid-cols-2 gap-2">
                             {['HDFC', 'SBI', 'ICICI', 'Axis'].map(bank => (
                               <Button key={bank} variant="outline" className="justify-start">
@@ -399,13 +400,13 @@ const IssueDetail = () => {
                           </div>
                         </div>
                         <Button className="w-full mt-2" onClick={() => {
-                          toast.success("Redirecting to Bank...");
+                          toast.success(t("common.redirectBank"));
                           setTimeout(() => {
-                            toast.success("Payment Successful!");
+                            toast.success(t("common.paySuccess"));
                             setOpenPayment(false);
                           }, 1500);
                         }}>
-                          Proceed
+                          {t("funding.proceed")}
                         </Button>
                       </TabsContent>
                     </Tabs>
@@ -419,18 +420,18 @@ const IssueDetail = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <ArrowUpRight className="h-5 w-5 text-green-600" />
-                  Funding Status
+                  {t("funding.status")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-muted-foreground">Total Required</span>
-                    <span className="font-semibold">₹{fundingInfo.approvedCost.toLocaleString()}</span>
+                    <span className="text-muted-foreground">{t("funding.totalRequired")}</span>
+                    <span className="font-semibold">₹{fundingInfo.approvedCost.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</span>
                   </div>
                   <Progress value={fundingInfo.progress} className="h-3" />
                   <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                    <span>Raised: ₹{fundingInfo.funded.toLocaleString()}</span>
+                    <span>{t("funding.raised")}: ₹{fundingInfo.funded.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</span>
                     <span>{Math.round(fundingInfo.progress)}%</span>
                   </div>
                 </div>
@@ -439,22 +440,22 @@ const IssueDetail = () => {
                   <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
                       <Building className="h-4 w-4 text-blue-600" />
-                      <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">Govt Grant</span>
+                      <span className="text-xs font-semibold text-blue-700 dark:text-blue-300">{t("funding.govtGrant")}</span>
                     </div>
-                    <p className="font-bold">₹{fundingInfo.government.toLocaleString()}</p>
+                    <p className="font-bold">₹{fundingInfo.government.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</p>
                   </div>
                   <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
                       <Users className="h-4 w-4 text-purple-600" />
-                      <span className="text-xs font-semibold text-purple-700 dark:text-purple-300">Community</span>
+                      <span className="text-xs font-semibold text-purple-700 dark:text-purple-300">{t("funding.community")}</span>
                     </div>
-                    <p className="font-bold">₹{fundingInfo.community.toLocaleString()}</p>
+                    <p className="font-bold">₹{fundingInfo.community.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</p>
                   </div>
                 </div>
 
                 <div>
                   <h4 className="text-xs font-semibold uppercase text-muted-foreground tracking-wider mb-3">
-                    Recent Contributors
+                    {t("funding.recentContributors")}
                   </h4>
                   <div className="space-y-2">
                     {fundingInfo.contributors.length > 0 ? (
@@ -462,13 +463,13 @@ const IssueDetail = () => {
                         <div key={i} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-sm">
                           <span className="font-medium">{c.name}</span>
                           <div className="text-right">
-                            <p className="font-semibold text-green-600">₹{c.amount.toLocaleString()}</p>
+                            <p className="font-semibold text-green-600">₹{c.amount.toLocaleString(language === 'hi' ? 'hi-IN' : 'en-IN')}</p>
                             <p className="text-[10px] text-muted-foreground">{c.date}</p>
                           </div>
                         </div>
                       ))
                     ) : (
-                      <p className="text-sm text-muted-foreground italic">No community contributions yet.</p>
+                      <p className="text-sm text-muted-foreground italic">{t("funding.noContributions")}</p>
                     )}
                   </div>
                 </div>
@@ -481,29 +482,29 @@ const IssueDetail = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5" />
-                  Expected Timeline
+                  {t("funding.expectedTimeline")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Estimated Start</span>
+                    <span className="text-sm text-muted-foreground">{t("funding.estimatedStart")}</span>
                     <span className="font-medium">
-                      {new Date().toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {new Date().toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Estimated Completion</span>
+                    <span className="text-sm text-muted-foreground">{t("funding.estimatedCompletion")}</span>
                     <span className="font-medium">
                       {(() => {
                         const d = new Date();
                         d.setDate(d.getDate() + 10);
-                        return d.toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' });
+                        return d.toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
                       })()}
                     </span>
                   </div>
                   <div className="mt-2 pt-3 border-t">
-                    <p className="text-xs text-muted-foreground">Timeline subject to weather conditions and material availability.</p>
+                    <p className="text-xs text-muted-foreground">{t("issues.timelineNote")}</p>
                   </div>
                 </div>
               </CardContent>
@@ -514,7 +515,7 @@ const IssueDetail = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  Location
+                  {t("report.location")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 overflow-hidden rounded-b-xl">

@@ -1,43 +1,46 @@
 import { FileText, Search, IndianRupee, CheckCircle, Star, ArrowRight } from "lucide-react";
-
-const steps = [
-  {
-    icon: FileText,
-    title: "Report Issue",
-    description: "Submit civic issues with photos, location, and details. Your privacy is protected with automatic face and plate blurring.",
-  },
-  {
-    icon: Search,
-    title: "Government Review",
-    description: "State authorities review and route issues to the appropriate Municipal Corporation for verification.",
-  },
-  {
-    icon: IndianRupee,
-    title: "Cost Approval",
-    description: "Transparent cost estimation in ₹ INR with public visibility. Community funding available for approved issues.",
-  },
-  {
-    icon: CheckCircle,
-    title: "Resolution & Proof",
-    description: "Authorities resolve issues and submit proof. Complete audit trail ensures accountability.",
-  },
-  {
-    icon: Star,
-    title: "Review & Reward",
-    description: "Verify resolution and earn rewards. Top contributors receive monthly cash prizes!",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function HowItWorksSection() {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      icon: FileText,
+      title: t("howItWorks.step1.title"),
+      description: t("howItWorks.step1.desc"),
+    },
+    {
+      icon: Search,
+      title: t("howItWorks.step2.title"),
+      description: t("howItWorks.step2.desc"),
+    },
+    {
+      icon: IndianRupee,
+      title: t("howItWorks.step3.title"),
+      description: t("howItWorks.step3.desc"),
+    },
+    {
+      icon: CheckCircle,
+      title: t("howItWorks.step4.title"),
+      description: t("howItWorks.step4.desc"),
+    },
+    {
+      icon: Star,
+      title: t("howItWorks.step5.title"),
+      description: t("howItWorks.step5.desc"),
+    },
+  ];
+
   return (
     <section className="py-16 md:py-24 bg-background">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            How It Works
+            {t("howItWorks.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A transparent, step-by-step process ensuring accountability at every stage
+            {t("howItWorks.subtitle")}
           </p>
         </div>
 
@@ -58,7 +61,7 @@ export function HowItWorksSection() {
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">{step.title}</h3>
                   <p className="text-sm text-muted-foreground">{step.description}</p>
-                  
+
                   {/* Arrow for mobile */}
                   {index < steps.length - 1 && (
                     <ArrowRight className="h-6 w-6 text-muted-foreground mt-4 lg:hidden rotate-90" />

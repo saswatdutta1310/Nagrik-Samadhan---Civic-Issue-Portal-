@@ -15,55 +15,66 @@ import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Notifications from "./pages/Notifications";
 import MyIssues from "./pages/MyIssues";
+import Analytics from "./pages/Analytics";
 
 import { AuthProvider } from "@/contexts/AuthContext";
 import { WalletProvider } from "@/contexts/WalletContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import { Chatbot } from "@/components/Chatbot";
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <WalletProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                {/* Home */}
-                <Route path="/" element={<Index />} />
+      <LanguageProvider>
+        <AuthProvider>
+          <WalletProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* Home */}
+                  <Route path="/" element={<Index />} />
 
-                {/* Issues */}
-                <Route path="/issues" element={<Issues />} />
-                <Route path="/issues/:id" element={<IssueDetail />} />
-                <Route path="/my-issues" element={<MyIssues />} />
+                  {/* Issues */}
+                  <Route path="/issues" element={<Issues />} />
+                  <Route path="/issues/:id" element={<IssueDetail />} />
+                  <Route path="/my-issues" element={<MyIssues />} />
 
-                {/* Report Issue */}
-                <Route path="/report" element={<ReportIssue />} />
+                  {/* Report Issue */}
+                  <Route path="/report" element={<ReportIssue />} />
 
-                {/* Leaderboard */}
-                <Route path="/leaderboard" element={<Leaderboard />} />
+                  {/* Leaderboard */}
+                  <Route path="/leaderboard" element={<Leaderboard />} />
 
-                {/* Notifications */}
-                <Route path="/notifications" element={<Notifications />} />
+                  {/* Notifications */}
+                  <Route path="/notifications" element={<Notifications />} />
 
-                {/* Auth */}
-                <Route path="/auth" element={<Auth />} />
+                  {/* Analytics */}
+                  <Route path="/analytics" element={<Analytics />} />
 
-                {/* Wallet */}
-                <Route path="/wallet" element={<Wallet />} />
+                  {/* Auth */}
+                  <Route path="/auth" element={<Auth />} />
 
-                {/* About */}
-                <Route path="/about" element={<About />} />
+                  {/* Wallet */}
+                  <Route path="/wallet" element={<Wallet />} />
 
-                {/* 404 */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </WalletProvider>
-      </AuthProvider>
+                  {/* About */}
+                  <Route path="/about" element={<About />} />
+
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+
+                {/* Global Chatbot */}
+                <Chatbot />
+              </BrowserRouter>
+            </TooltipProvider>
+          </WalletProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

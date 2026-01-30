@@ -2,17 +2,20 @@ import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { categories } from "@/lib/categories";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function CategoriesSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="py-16 md:py-24 bg-background">
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Report Issues by Category
+            {t("categories.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Select the category that best matches your civic concern for faster routing and resolution.
+            {t("categories.subtitle")}
           </p>
         </div>
 
@@ -33,10 +36,10 @@ export function CategoriesSection() {
                     </div>
 
                     <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                      {category.name}
+                      {t(`categories.${category.id}.name`)}
                     </h3>
                     <p className="text-sm text-muted-foreground line-clamp-2">
-                      {category.description}
+                      {t(`categories.${category.id}.desc`)}
                     </p>
                   </CardContent>
                 </Card>
@@ -50,7 +53,7 @@ export function CategoriesSection() {
             to="/report"
             className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
           >
-            View all categories
+            {t("categories.viewAll")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

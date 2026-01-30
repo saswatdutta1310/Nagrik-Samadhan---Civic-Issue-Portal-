@@ -8,6 +8,8 @@ import { statusLabels, statusColors } from "@/lib/mockData";
 import { getCategoryById } from "@/lib/categories";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { hi, enIN } from "date-fns/locale";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Issue = {
   id: string;
@@ -23,6 +25,7 @@ type Issue = {
 export function RecentIssuesSection() {
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const fetchIssues = async () => {
@@ -46,7 +49,7 @@ export function RecentIssuesSection() {
     return (
       <section className="py-16 md:py-24 bg-card">
         <div className="container text-center text-muted-foreground">
-          Loading recent issues...
+          {t("common.loadingRecent")}
         </div>
       </section>
     );
@@ -58,16 +61,16 @@ export function RecentIssuesSection() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Recent Issues
+              {t("recentIssues.title")}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Track civic issues being reported and resolved
+              {t("recentIssues.subtitle")}
             </p>
           </div>
 
           <Link to="/issues">
             <Button variant="outline">
-              View All Issues
+              {t("issues.viewAll")}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -75,7 +78,7 @@ export function RecentIssuesSection() {
 
         {issues.length === 0 ? (
           <p className="text-muted-foreground text-center">
-            No issues reported yet.
+            {t("issues.noReports")}
           </p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,13 +101,13 @@ export function RecentIssuesSection() {
                           )}
                           <div>
                             <p className="text-sm text-muted-foreground">
-                              {category?.name}
+                              {t(`categories.${issue.category}.name`)}
                             </p>
                             <Badge
                               variant="secondary"
                               className={`mt-1 ${statusColors[issue.status]}`}
                             >
-                              {statusLabels[issue.status]}
+                              {t(`issues.${issue.status.toLowerCase().replace(" ", "")}`) || issue.status}
                             </Badge>
                           </div>
                         </div>
@@ -132,7 +135,10 @@ export function RecentIssuesSection() {
                           <span>
                             {formatDistanceToNow(
                               new Date(issue.created_at),
-                              { addSuffix: true }
+                              {
+                                addSuffix: true,
+                                locale: language === 'hi' ? hi : enIN
+                              }
                             )}
                           </span>
                         </div>

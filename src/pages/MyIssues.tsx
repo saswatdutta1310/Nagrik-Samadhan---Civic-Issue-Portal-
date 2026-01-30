@@ -9,6 +9,7 @@ import { Clock, ArrowLeft, Loader2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Issue = {
     id: string;
@@ -23,6 +24,7 @@ type Issue = {
 
 export default function MyIssues() {
     const { user, loading: authLoading } = useAuth();
+    const { t } = useLanguage();
     const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -72,12 +74,12 @@ export default function MyIssues() {
         return (
             <Layout>
                 <div className="container py-20 text-center">
-                    <h2 className="text-2xl font-bold mb-4">Please Sign In</h2>
+                    <h2 className="text-2xl font-bold mb-4">{t("myIssues.signinTitle")}</h2>
                     <p className="text-muted-foreground mb-6">
-                        You need to be logged in to view your reported issues.
+                        {t("myIssues.signinDesc")}
                     </p>
                     <Link to="/auth">
-                        <Button>Sign In</Button>
+                        <Button>{t("nav.signIn")}</Button>
                     </Link>
                 </div>
             </Layout>
@@ -92,9 +94,9 @@ export default function MyIssues() {
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-bold">My Issues History</h1>
+                        <h1 className="text-3xl font-bold">{t("myIssues.title")}</h1>
                         <p className="text-muted-foreground mt-1">
-                            Track the status of issues you have reported
+                            {t("myIssues.subtitle")}
                         </p>
                     </div>
                 </div>
@@ -105,7 +107,7 @@ export default function MyIssues() {
                         <Card className="bg-primary/5 border-primary/20">
                             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
                                 <span className="text-3xl font-bold text-primary mb-1">{issues.length}</span>
-                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Reported</span>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("myIssues.totalReported")}</span>
                             </CardContent>
                         </Card>
                         <Card className="bg-green-500/5 border-green-500/20">
@@ -113,7 +115,7 @@ export default function MyIssues() {
                                 <span className="text-3xl font-bold text-green-600 mb-1">
                                     {issues.filter(i => i.status === 'resolved').length}
                                 </span>
-                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Resolved</span>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("issues.resolved")}</span>
                             </CardContent>
                         </Card>
                         <Card className="bg-orange-500/5 border-orange-500/20">
@@ -121,7 +123,7 @@ export default function MyIssues() {
                                 <span className="text-3xl font-bold text-orange-600 mb-1">
                                     {issues.filter(i => i.status !== 'resolved').length}
                                 </span>
-                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Pending</span>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("analytics.pending")}</span>
                             </CardContent>
                         </Card>
                     </div>
@@ -130,16 +132,16 @@ export default function MyIssues() {
                 {loading ? (
                     <div className="py-20 text-center text-muted-foreground">
                         <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-                        Loading your history...
+                        {t("myIssues.loading")}
                     </div>
                 ) : issues.length === 0 ? (
                     <div className="text-center py-16 border-2 border-dashed rounded-xl">
-                        <h3 className="text-lg font-medium mb-2">No issues reported yet</h3>
+                        <h3 className="text-lg font-medium mb-2">{t("myIssues.noIssuesTitle")}</h3>
                         <p className="text-muted-foreground mb-6">
-                            You haven't reported any civic issues yet.
+                            {t("myIssues.noIssuesDesc")}
                         </p>
                         <Link to="/report">
-                            <Button>Report an Issue</Button>
+                            <Button>{t("hero.reportBtn")}</Button>
                         </Link>
                     </div>
                 ) : (
@@ -167,7 +169,7 @@ export default function MyIssues() {
                                                             {issue.title}
                                                         </h3>
                                                         {issue.urgency === "high" && (
-                                                            <Badge variant="destructive" className="h-5 text-[10px] px-1.5">URGENT</Badge>
+                                                            <Badge variant="destructive" className="h-5 text-[10px] px-1.5">{t("browse.urgentBadge")}</Badge>
                                                         )}
                                                     </div>
 
@@ -176,7 +178,7 @@ export default function MyIssues() {
                                                     </p>
 
                                                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                                        <span>{category?.name}</span>
+                                                        <span>{t(`categories.${issue.category}.name`)}</span>
                                                         <span className="flex items-center gap-1">
                                                             <Clock className="h-3 w-3" />
                                                             {issue.reported_at
@@ -184,7 +186,7 @@ export default function MyIssues() {
                                                                     new Date(issue.reported_at),
                                                                     { addSuffix: true }
                                                                 )
-                                                                : "Recently"}
+                                                                : t("common.recently")}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -192,7 +194,7 @@ export default function MyIssues() {
                                                 <div className="shrink-0">
                                                     {issue.status && (
                                                         <Badge variant={issue.status === 'resolved' ? 'default' : 'secondary'} className="capitalize">
-                                                            {issue.status}
+                                                            {t(`issues.${issue.status.toLowerCase().replace(" ", "")}`) || issue.status}
                                                         </Badge>
                                                     )}
                                                 </div>

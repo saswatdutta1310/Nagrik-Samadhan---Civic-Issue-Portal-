@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type LeaderboardUser = {
   user_id: string;
@@ -21,6 +22,7 @@ type LeaderboardUser = {
 };
 
 const Leaderboard = () => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +57,7 @@ const Leaderboard = () => {
     return (
       <Layout>
         <div className="py-20 text-center text-muted-foreground">
-          Loading leaderboard...
+          {t("leaderboard.loading")}
         </div>
       </Layout>
     );
@@ -74,14 +76,14 @@ const Leaderboard = () => {
             <div className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-1.5 mb-4">
               <Trophy className="h-4 w-4 text-accent-foreground" />
               <span className="text-sm font-medium text-accent-foreground">
-                Monthly Leaderboard
+                {t("nav.leaderboard")}
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
-              Top Contributors
+              {t("leaderboard.title")}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Citizens driving real change by reporting and resolving civic issues
+              {t("leaderboard.subtitle")}
             </p>
           </div>
 
@@ -104,7 +106,7 @@ const Leaderboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
-                Full Rankings
+                {t("leaderboard.fullRankings")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -123,12 +125,12 @@ const Leaderboard = () => {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <p className="font-medium">User {user.user_id.slice(0, 6)}</p>
+                      <p className="font-medium">{t("leaderboard.user")} {user.user_id.slice(0, 6)}</p>
                       <p className="text-sm text-muted-foreground">
-                        {user.issues_reported} reported · {user.issues_resolved} resolved
+                        {user.issues_reported} {t("leaderboard.reported")} · {user.issues_resolved} {t("leaderboard.resolved")}
                       </p>
                     </div>
-                    <p className="font-semibold">{user.score} pts</p>
+                    <p className="font-semibold">{user.score} {t("common.points")}</p>
                   </div>
                 ))}
               </div>
@@ -143,7 +145,7 @@ const Leaderboard = () => {
                   <Award className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Monthly Rewards</h3>
+                  <h3 className="font-semibold mb-2">{t("leaderboard.monthlyRewards")}</h3>
                   <div className="flex flex-wrap gap-3">
                     <Badge><Medal className="h-3 w-3 mr-1" />1st: ₹5,000</Badge>
                     <Badge variant="secondary">2nd: ₹3,000</Badge>
@@ -174,6 +176,7 @@ function PodiumCard({
   user: LeaderboardUser;
   place: 1 | 2 | 3;
 }) {
+  const { t } = useLanguage();
   const size = place === 1 ? "h-24 w-24" : place === 2 ? "h-20 w-20" : "h-16 w-16";
 
   return (
@@ -183,8 +186,8 @@ function PodiumCard({
           {user.user_id.slice(0, 2).toUpperCase()}
         </AvatarFallback>
       </Avatar>
-      <h3 className="mt-4 font-semibold">User {user.user_id.slice(0, 6)}</h3>
-      <Badge className="mt-2">{user.score} pts</Badge>
+      <h3 className="mt-4 font-semibold">{t("leaderboard.user")} {user.user_id.slice(0, 6)}</h3>
+      <Badge className="mt-2">{user.score} {t("common.points")}</Badge>
     </div>
   );
 }

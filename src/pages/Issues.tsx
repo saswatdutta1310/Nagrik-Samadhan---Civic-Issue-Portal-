@@ -15,6 +15,7 @@ import { categories, getCategoryById } from "@/lib/categories";
 import { Clock, Search, MapPin } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { supabase } from "@/lib/supabase";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { MOCK_ISSUES, ACCOUNT_HOLDER_ISSUES } from "@/lib/mockData";
 
@@ -31,6 +32,7 @@ type Issue = {
 };
 
 export default function Issues() {
+  const { t } = useLanguage();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -82,9 +84,9 @@ export default function Issues() {
     <Layout>
       <div className="container py-10">
         {/* HEADER */}
-        <h1 className="text-3xl font-bold mb-2">Browse Civic Issues</h1>
+        <h1 className="text-3xl font-bold mb-2">{t("browse.title")}</h1>
         <p className="text-muted-foreground mb-10">
-          Reported issues by citizens across the city
+          {t("browse.subtitle")}
         </p>
 
         {/* 🔹 CATEGORY GRID (LIKE SCREENSHOT) */}
@@ -106,9 +108,9 @@ export default function Issues() {
                   >
                     <Icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold">{cat.name}</h3>
+                  <h3 className="font-semibold">{t(`categories.${cat.id}.name`)}</h3>
                   <p className="text-xs text-muted-foreground">
-                    {cat.description}
+                    {t(`categories.${cat.id}.desc`)}
                   </p>
                 </CardContent>
               </Card>
@@ -122,7 +124,7 @@ export default function Issues() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               className="pl-10"
-              placeholder="Search issues..."
+              placeholder={t("browse.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -130,22 +132,22 @@ export default function Issues() {
 
           <Select value={selectedUrgency} onValueChange={setSelectedUrgency}>
             <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Urgency" />
+              <SelectValue placeholder={t("browse.urgency")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="high">High</SelectItem>
+              <SelectItem value="all">{t("browse.all")}</SelectItem>
+              <SelectItem value="low">{t("browse.low")}</SelectItem>
+              <SelectItem value="medium">{t("browse.medium")}</SelectItem>
+              <SelectItem value="high">{t("browse.high")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* 🔹 ISSUES LIST (LIKE CARD SCREENSHOT) */}
         {loading ? (
-          <p className="text-center mt-20">Loading issues...</p>
+          <p className="text-center mt-20">{t("browse.loading")}</p>
         ) : filteredIssues.length === 0 ? (
-          <p className="text-center mt-20">No issues found</p>
+          <p className="text-center mt-20">{t("browse.noIssues")}</p>
         ) : (
           <div className="space-y-6">
             {filteredIssues.map((issue: any) => {
@@ -165,16 +167,16 @@ export default function Issues() {
                               {issue.title}
                             </h3>
                             {issue.status && (
-                              <Badge className="capitalize shrink-0">{issue.status}</Badge>
+                              <Badge className="capitalize shrink-0">{t(`issues.${issue.status.toLowerCase().replace(" ", "")}`) || issue.status}</Badge>
                             )}
                           </div>
 
                           <div className="flex items-center gap-2 mb-3">
                             {issue.urgency === "high" && (
-                              <Badge variant="destructive" className="h-5 text-[10px] px-1.5">URGENT</Badge>
+                              <Badge variant="destructive" className="h-5 text-[10px] px-1.5">{t("browse.urgentBadge")}</Badge>
                             )}
                             <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-md">
-                              {category?.name}
+                              {t(`categories.${issue.category}.name`)}
                             </span>
                           </div>
 
@@ -197,7 +199,7 @@ export default function Issues() {
                                 new Date(issue.reported_at),
                                 { addSuffix: true }
                               )
-                              : "Recently"}
+                              : t("common.recently")}
                           </span>
                         </div>
                       </div>

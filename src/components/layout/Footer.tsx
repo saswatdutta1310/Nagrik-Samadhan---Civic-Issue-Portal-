@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="container py-12">
@@ -15,7 +18,7 @@ export function Footer() {
               <span className="text-xl font-bold text-foreground">Nagrik Samadhan</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Empowering citizens to build better communities through transparent civic engagement.
+              {t("footer.description")}
             </p>
             <div className="flex gap-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -35,26 +38,26 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.quickLinks")}</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/issues" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Browse Issues
+                  {t("nav.browseIssues")}
                 </Link>
               </li>
               <li>
                 <Link to="/report" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Report an Issue
+                  {t("nav.report")}
                 </Link>
               </li>
               <li>
                 <Link to="/leaderboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Leaderboard
+                  {t("nav.leaderboard")}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  About Us
+                  {t("footer.aboutUs")}
                 </Link>
               </li>
             </ul>
@@ -62,26 +65,26 @@ export function Footer() {
 
           {/* Categories */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Issue Categories</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.issueCategories")}</h4>
             <ul className="space-y-2">
               <li>
                 <Link to="/issues?category=road" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Road & Transportation
+                  {t("categories.road.name")}
                 </Link>
               </li>
               <li>
                 <Link to="/issues?category=water" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Water & Drainage
+                  {t("categories.water.name")}
                 </Link>
               </li>
               <li>
                 <Link to="/issues?category=electricity" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Electricity & Streetlights
+                  {t("categories.electricity.name")}
                 </Link>
               </li>
               <li>
                 <Link to="/issues?category=sanitation" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Sanitation & Waste
+                  {t("categories.sanitation.name")}
                 </Link>
               </li>
             </ul>
@@ -89,7 +92,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Contact Us</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t("footer.contactUs")}</h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
@@ -109,17 +112,17 @@ export function Footer() {
 
         <div className="mt-8 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 Nagrik Samadhan. Government of India Initiative.
+            {t("footer.copyright")}
           </p>
           <div className="flex gap-6">
             <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Privacy Policy
+              {t("footer.privacy")}
             </Link>
             <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Terms of Service
+              {t("footer.terms")}
             </Link>
             <Link to="/accessibility" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Accessibility
+              {t("footer.accessibility")}
             </Link>
           </div>
         </div>

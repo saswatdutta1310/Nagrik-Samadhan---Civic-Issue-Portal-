@@ -19,9 +19,11 @@ import {
     AlertCircle
 } from "lucide-react";
 import { useWallet } from "@/contexts/WalletContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Wallet() {
     const { balance, transactions, addFunds, withdrawFunds } = useWallet();
+    const { t } = useLanguage();
     const [withdrawMethod, setWithdrawMethod] = useState<"upi" | "bank">("upi");
     const [amount, setAmount] = useState("");
     const [details, setDetails] = useState("");
@@ -29,7 +31,7 @@ export default function Wallet() {
 
     const handleTransaction = (type: "credit" | "debit") => {
         if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-            toast.error("Please enter a valid amount");
+            toast.error(t("wallet.invalidAmount"));
             return;
         }
 
@@ -37,7 +39,7 @@ export default function Wallet() {
 
         if (type === "debit") {
             if (val > balance) {
-                toast.error("Insufficient balance");
+                toast.error(t("wallet.insufficientBalance"));
                 return;
             }
             withdrawFunds(val, withdrawMethod);
@@ -60,12 +62,12 @@ export default function Wallet() {
                         <div className="absolute right-0 top-0 h-full w-1/2 bg-white/10 skew-x-12 translate-x-1/2" />
                         <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full">
                             <div>
-                                <p className="text-primary-foreground/80 font-medium mb-1">Current Balance</p>
+                                <p className="text-primary-foreground/80 font-medium mb-1">{t("wallet.currentBalance")}</p>
                                 <h2 className="text-4xl font-bold">₹{balance.toLocaleString()}</h2>
                             </div>
                             <div className="mt-4 flex items-center gap-2 text-sm text-primary-foreground/90">
                                 <WalletIcon className="h-4 w-4" />
-                                <span>Available for withdrawal</span>
+                                <span>{t("wallet.availableForWithdrawal")}</span>
                             </div>
                         </CardContent>
                     </Card>
@@ -75,14 +77,14 @@ export default function Wallet() {
                         <CardContent className="p-6 flex flex-col justify-between h-full">
                             <div>
                                 <div className="flex items-center justify-between mb-2">
-                                    <p className="text-muted-foreground font-medium">Reward Points</p>
+                                    <p className="text-muted-foreground font-medium">{t("wallet.rewardPoints")}</p>
                                     <Trophy className="h-4 w-4 text-yellow-500" />
                                 </div>
                                 <h2 className="text-3xl font-bold">1,250</h2>
                             </div>
                             <div className="flex items-center gap-2 mt-2 text-sm text-green-600">
                                 <ArrowUpRight className="h-4 w-4" />
-                                +150 this week
+                                +150 {t("wallet.thisWeek")}
                             </div>
                         </CardContent>
                     </Card>
@@ -92,12 +94,12 @@ export default function Wallet() {
                         <CardContent className="p-6 flex flex-col justify-between h-full">
                             <div>
                                 <div className="flex items-center justify-between mb-2">
-                                    <p className="text-muted-foreground font-medium">Lifetime Earnings</p>
+                                    <p className="text-muted-foreground font-medium">{t("wallet.lifetimeEarnings")}</p>
                                     <Activity className="h-4 w-4 text-blue-500" />
                                 </div>
                                 <h2 className="text-3xl font-bold">₹{(3450 + (balance > 2450 ? balance - 2450 : 0)).toLocaleString()}</h2>
                             </div>
-                            <p className="text-sm text-muted-foreground mt-2">Total earnings from rewards</p>
+                            <p className="text-sm text-muted-foreground mt-2">{t("wallet.totalEarningsDesc")}</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -107,13 +109,13 @@ export default function Wallet() {
                     {/* Transaction Manager */}
                     <Card className="h-full">
                         <CardHeader>
-                            <CardTitle>Manage Funds</CardTitle>
+                            <CardTitle>{t("wallet.manageFunds")}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                                    <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
-                                    <TabsTrigger value="add_fund">Add Funds</TabsTrigger>
+                                    <TabsTrigger value="withdraw">{t("wallet.withdraw")}</TabsTrigger>
+                                    <TabsTrigger value="add_fund">{t("wallet.addFunds")}</TabsTrigger>
                                 </TabsList>
 
                                 {/* WITHDRAW */}
@@ -132,15 +134,15 @@ export default function Wallet() {
                                                 className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center justify-center gap-2 transition-all ${withdrawMethod === 'bank' ? 'border-primary bg-primary/5' : 'border-muted hover:border-primary/50'}`}
                                             >
                                                 <Landmark className={`h-6 w-6 ${withdrawMethod === 'bank' ? 'text-primary' : 'text-muted-foreground'}`} />
-                                                <span className={`font-medium ${withdrawMethod === 'bank' ? 'text-foreground' : 'text-muted-foreground'}`}>Bank Transfer</span>
+                                                <span className={`font-medium ${withdrawMethod === 'bank' ? 'text-foreground' : 'text-muted-foreground'}`}>{t("wallet.bankTransfer")}</span>
                                             </div>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium">Amount (₹)</label>
+                                            <label className="text-sm font-medium">{t("wallet.amountLabel")}</label>
                                             <Input
                                                 type="number"
-                                                placeholder="Enter amount"
+                                                placeholder={t("wallet.amountPlaceholder")}
                                                 value={amount}
                                                 onChange={(e) => setAmount(e.target.value)}
                                             />
@@ -148,17 +150,17 @@ export default function Wallet() {
 
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium">
-                                                {withdrawMethod === 'upi' ? 'UPI ID' : 'Account Number'}
+                                                {withdrawMethod === 'upi' ? t("wallet.upiId") : t("wallet.accountNumber")}
                                             </label>
                                             <Input
-                                                placeholder={withdrawMethod === 'upi' ? 'username@upi' : 'Account Number'}
+                                                placeholder={withdrawMethod === 'upi' ? 'username@upi' : t("wallet.accountNumber")}
                                                 value={details}
                                                 onChange={(e) => setDetails(e.target.value)}
                                             />
                                         </div>
 
                                         <Button className="w-full" onClick={() => handleTransaction("debit")}>
-                                            Withdraw Money
+                                            {t("wallet.withdrawMoney")}
                                         </Button>
                                     </div>
                                 </TabsContent>
@@ -167,23 +169,23 @@ export default function Wallet() {
                                 <TabsContent value="add_fund" className="space-y-6">
                                     <div className="p-4 bg-muted/40 rounded-lg text-sm text-muted-foreground mb-4 flex gap-3">
                                         <AlertCircle className="h-5 w-5 shrink-0 text-primary" />
-                                        This is a simulation. Adding funds will increase your virtual wallet balance immediately.
+                                        {t("wallet.simulationNotice")}
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium">Amount to Add (₹)</label>
+                                        <label className="text-sm font-medium">{t("wallet.amountLabel")}</label>
                                         <Input
                                             type="number"
-                                            placeholder="Enter amount"
+                                            placeholder={t("wallet.amountPlaceholder")}
                                             value={amount}
                                             onChange={(e) => setAmount(e.target.value)}
                                             className="text-lg"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium">Payment Method</label>
+                                        <label className="text-sm font-medium">{t("wallet.paymentMethod")}</label>
                                         <div className="flex gap-4">
                                             <Button variant="outline" className="flex-1 gap-2">
-                                                <CreditCard className="h-4 w-4" /> Card
+                                                <CreditCard className="h-4 w-4" /> {t("wallet.card")}
                                             </Button>
                                             <Button variant="outline" className="flex-1 gap-2">
                                                 <Smartphone className="h-4 w-4" /> UPI
@@ -191,7 +193,7 @@ export default function Wallet() {
                                         </div>
                                     </div>
                                     <Button className="w-full bg-green-600 hover:bg-green-700" onClick={() => handleTransaction("credit")}>
-                                        <Plus className="h-4 w-4 mr-2" /> Add Funds
+                                        <Plus className="h-4 w-4 mr-2" /> {t("wallet.addFunds")}
                                     </Button>
                                 </TabsContent>
                             </Tabs>
@@ -205,21 +207,21 @@ export default function Wallet() {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-yellow-800 dark:text-yellow-500">
                                     <Trophy className="h-5 w-5" />
-                                    Rewards Program
+                                    {t("wallet.rewardsProgram")}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="flex justify-between items-center text-sm">
-                                    <span>Verified Issue Report</span>
-                                    <span className="font-bold text-yellow-700">+100 pts</span>
+                                    <span>{t("wallet.verifiedReport")}</span>
+                                    <span className="font-bold text-yellow-700">+100 {t("common.points")}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
-                                    <span>Community Verification</span>
-                                    <span className="font-bold text-yellow-700">+50 pts</span>
+                                    <span>{t("wallet.communityVerification")}</span>
+                                    <span className="font-bold text-yellow-700">+50 {t("common.points")}</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
-                                    <span>Top 10 Monthly Rank</span>
-                                    <span className="font-bold text-yellow-700">₹1,000 Cash</span>
+                                    <span>{t("wallet.topMonthly")}</span>
+                                    <span className="font-bold text-yellow-700">₹1,000 {t("wallet.cash")}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -229,7 +231,7 @@ export default function Wallet() {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Activity className="h-5 w-5" />
-                                    Recent Activity
+                                    {t("wallet.recentActivity")}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
@@ -239,11 +241,11 @@ export default function Wallet() {
                                             <ArrowUpRight className="h-4 w-4" />
                                         </div>
                                         <div>
-                                            <p className="font-medium">Earned Points</p>
+                                            <p className="font-medium">{t("wallet.earnedPoints")}</p>
                                             <p className="text-xs text-muted-foreground">For reporting pothole</p>
                                         </div>
                                     </div>
-                                    <span className="font-bold text-green-600">+50 pts</span>
+                                    <span className="font-bold text-green-600">+50 {t("common.points")}</span>
                                 </div>
                                 <div className="flex items-center justify-between text-sm">
                                     <div className="flex items-center gap-3">
@@ -251,11 +253,11 @@ export default function Wallet() {
                                             <Activity className="h-4 w-4" />
                                         </div>
                                         <div>
-                                            <p className="font-medium">Contribution</p>
+                                            <p className="font-medium">{t("wallet.contribution")}</p>
                                             <p className="text-xs text-muted-foreground">Funded Issue #129</p>
                                         </div>
                                     </div>
-                                    <span className="font-bold text-blue-600">10 pts</span>
+                                    <span className="font-bold text-blue-600">10 {t("common.points")}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -267,7 +269,7 @@ export default function Wallet() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <History className="h-5 w-5" />
-                            Transaction History
+                            {t("wallet.transactionHistory")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
