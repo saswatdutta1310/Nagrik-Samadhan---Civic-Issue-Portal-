@@ -12,6 +12,7 @@
 2. **Prabhakar Shukla** - [AP25110070091]
 3. **Aditya Kumar** - [AP25110071284]
 4. **Dharitri Padhy** - [AP25110070073]
+5. **B Adarsh Subudhi** - [AP25110071269]
 
 **GitHub Repository:** [https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-](https://github.com/saswatdutta1310/Nagrik-Samadhan---Civic-Issue-Portal-)
 

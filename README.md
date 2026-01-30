@@ -160,7 +160,7 @@ We are committed to transparency and responsible innovation.
 -   **Prabhakar Shukla** - Database Engineer
 -   **Aditya Kumar** - Frontend Developer
 -   **Dharitri Padhi** - Idea Innovator
-
+-   **B Adarsh Subudhi** - Pitching & Documentation
 ---
 
 ## 📄 License
@@ -168,4 +168,3 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ---
 
-> *Built with ❤️ for a better tomorrow.*
