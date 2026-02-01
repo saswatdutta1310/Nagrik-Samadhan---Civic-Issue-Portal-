@@ -49,3 +49,4 @@ export function FraudAlertDialog({ open, onClose }: FraudAlertDialogProps) {
         </AlertDialog>
     );
 }
+ 

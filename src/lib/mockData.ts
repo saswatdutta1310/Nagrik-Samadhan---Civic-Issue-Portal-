@@ -166,3 +166,4 @@ export const statusColors: Record<string, string> = {
   resolved: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500",
   rejected: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-500",
 };
+ 

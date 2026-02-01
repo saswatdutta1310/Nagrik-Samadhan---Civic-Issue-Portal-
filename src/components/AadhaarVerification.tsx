@@ -236,3 +236,4 @@ export function AadhaarVerification({ open, onClose, onVerified }: AadhaarVerifi
         </Dialog>
     );
 }
+ 

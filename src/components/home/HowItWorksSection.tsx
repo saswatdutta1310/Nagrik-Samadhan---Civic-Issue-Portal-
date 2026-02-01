@@ -75,3 +75,4 @@ export function HowItWorksSection() {
     </section>
   );
 }
+ 
