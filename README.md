@@ -95,6 +95,16 @@ Our development followed a **"Module-First" prompt strategy**:
 
 ---
 
+## 📄 Project Documentation Links
+
+- [**Prompt Documentation**](./PROMPT_DOCUMENTATION.md) - Detailed list of prompts used during development.
+- [**AI Features Guide**](./AI_FEATURES.md) - Deep dive into implemented AI functionality.
+- [**Project Report**](./PROJECT_REPORT.md) - Comprehensive implementation details and impact summary.
+- [**AI Disclosure**](./AI.md) - Transparency report on AI usage.
+
+---
+
+
 ## 💻 Source Code Structure
 
 The project follows a clean, modular directory structure for ease of navigation and maintenance:
