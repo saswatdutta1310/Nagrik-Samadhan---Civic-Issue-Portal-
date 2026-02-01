@@ -167,3 +167,4 @@ Nagrik Samadhan has immense potential for growth beyond the hackathon:
 4.  **Tailwind CSS Documentation:** [https://tailwindcss.com/docs](https://tailwindcss.com/docs)
 5.  **Lucide Icons:** [https://lucide.dev/](https://lucide.dev/)
 
+ 

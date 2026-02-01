@@ -28,3 +28,4 @@
 ## Next Steps
 - Backend Payment integration.
 - Real-time features (Supabase Subscriptions).
+ 
