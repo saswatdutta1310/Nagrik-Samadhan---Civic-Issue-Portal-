@@ -184,7 +184,6 @@ To ensure judges can successfully run and build the project exactly as intended,
 - **Prabhakar Shukla** - Database Engineer
 - **Aditya Kumar** - Frontend Developer
 - **Dharitri Padhi** - Idea Innovator
-- **B Adarsh Subudhi** - Pitching & Documentation
 
 ---
 
