@@ -32,6 +32,7 @@ export default function Auth() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [otp, setOtp] = useState("");
+  const [pendingAuthAction, setPendingAuthAction] = useState<"emailSignup" | "phoneSignup" | null>(null);
 
   // Helper: prefix +91 only if user enters 10 digits
   const formatPhone = (raw: string) => {
@@ -94,8 +95,9 @@ export default function Auth() {
 
     // Check if Aadhaar is already verified
     if (localStorage.getItem("aadhaar_verified") === "true" || isAadhaarVerified) {
-      handleActualSignup();
+      await handleActualSignup();
     } else {
+      setPendingAuthAction("emailSignup");
       setShowAadhaarDialog(true);
     }
   };
@@ -103,6 +105,10 @@ export default function Auth() {
   // Email sign in
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -153,8 +159,8 @@ export default function Auth() {
   };
 
   // Verify OTP
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleVerifyOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     const digits = phoneNumber.replace(/\D/g, "");
     if (digits.length !== 10) {
       toast.error(t("auth.invalidPhone") || "Please enter a valid 10-digit phone number");
@@ -194,13 +200,31 @@ export default function Auth() {
 
     if (localStorage.getItem("aadhaar_verified") === "true" || isAadhaarVerified) {
       if (showOtpInput) {
-        handleVerifyOtp(e);
+        await handleVerifyOtp();
       } else {
-        handleSendOtp(e);
+        await handleSendOtp();
       }
     } else {
+      setPendingAuthAction("phoneSignup");
       setShowAadhaarDialog(true);
     }
+  };
+
+  const handleAadhaarVerified = async () => {
+    setIsAadhaarVerified(true);
+    localStorage.setItem("aadhaar_verified", "true");
+
+    if (pendingAuthAction === "emailSignup") {
+      await handleActualSignup();
+    } else if (pendingAuthAction === "phoneSignup") {
+      if (showOtpInput) {
+        await handleVerifyOtp();
+      } else {
+        await handleSendOtp();
+      }
+    }
+
+    setPendingAuthAction(null);
   };
 
   // Google Button Component
@@ -461,7 +485,16 @@ export default function Auth() {
           </Tabs>
         </div>
       </div>
+
+      <AadhaarVerification
+        open={showAadhaarDialog}
+        onClose={() => {
+          setShowAadhaarDialog(false);
+          setPendingAuthAction(null);
+        }}
+        onVerified={handleAadhaarVerified}
+      />
     </div>
   );
-} 
- 
+}
+
