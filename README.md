@@ -86,7 +86,7 @@ graph TD
 
 ## 📝 Prompt Strategy Summary
 
-Our development followed a **"Module-First" prompt strategy**:
+Our development followed **"Module-First" prompt strategy**:
 
 1.  **Inception Prompts**: Defined clear boundaries for state management and API integration.
 2.  **Component-Driven Iteration**: Used specific prompts to build reusable UI atoms before assembling pages.
