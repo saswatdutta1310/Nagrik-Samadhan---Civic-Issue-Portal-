@@ -162,7 +162,7 @@ To ensure judges can successfully run and build the project exactly as intended,
     npm run preview
     ```
     *This runs the production build locally to verify all assets and routes work as expected.*
-4.  **Verification**: Navigate to `http://localhost:4173/` (default Vite preview port) to interact with the verified production build.
+4.  **Verification**: Navigate to `http://localhost:4173/` (default Vite preview port)  interact with the verified production build.
 
 ---
 
