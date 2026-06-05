@@ -16,7 +16,7 @@ Traditional civic issue reporting in India faces several critical challenges:
 - **No Incentives**: Civic engagement is seen as a chore, leading to low participation from youth and technology-savvy citizens.
 - **Verification Issues**: Difficulty for authorities to verify the authenticity and precise location of reported problems.
 
-**Nagrik Samadhan** solves this by providing a location-first, transparent, and gamified platform that bridges the gap between citizens and local governance.
+**Nagrik Samadhan** solves this all by providing a location-first, transparent, and gamified platform that bridges the gap between citizens and local governance.
 
 ---
 
